@@ -1,0 +1,94 @@
+---
+- name: Install "appium" node.js package.
+  npm:
+    name: appium
+    version: "{{ appium_version }}"
+    global: true
+    production: true
+  environment:
+    APPIUM_SKIP_CHROMEDRIVER_INSTALL: true
+
+- name: Add Quamotion PPA apt-key
+  apt_key: 
+    data: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+      xsFNBFj351EBEAC5l9E8BdTHgooCgR47IgO9u5P+fYM2ik/KK8zhuSs9uozX7glB
+      CoCggeCjRzFrSOvrNps1foa4AxEntflQaFcgpZoF+aUhqQo+XqoINrzNxCTvpB2x
+      dLsZvjm7Eq4Hj+zibsXOzGPPZJhpkrFBSVTaIoheORsgSYPYij2IsfeDvXqAsR8M
+      O0zSkuZMxyEZlcDsAzOKQPaP6uHZKO7BeR7+xy1xgoD6fF7Ng0OFX1LOO91F7sG9
+      YUdcLSX410cjLKRAH1ezpMAKlEmQr9VtD3emqS5k4R5e7B2aCFx1AsLRf861fDEw
+      X6ymeWD3SWxol5kyjSMvEQFf7jS1uLIPoQbkSFuSay7NRqUFuXHfypM8rajXzI6v
+      G+DN3hNkNw8y++dSBLs0BdX/42rxgyvKNrXLBkD03cjRmASbfK3qWpJxT21gDwQR
+      K/qhBeV+ROsieF3t6CATKVUzFWel46IPJGSZrz/NtU6a4LFkXytf+hiT55MxVOsx
+      UgE4SBevSrXioENBUYGSP89soNNZGgGhl5YkqQ2fV5MHvtDRffjHCtzPwaC9jil5
+      MSoOeEwOXkxsM3a/JljfyYT/mcRKISBsqF5w2GEsB6MdY5DxqdCYbfcKIzPYn9/1
+      o+zRz30rtm6uCjIAlAJi5Jy1HnMNQoZ9xv21O1v0EgX+yJN51AuMax7dtQARAQAB
+      zRtMYXVuY2hwYWQgUFBBIGZvciBRdWFtb3Rpb27CwXgEEwECACIFAlj351ECGwMG
+      CwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJECRrR2niXnp0hv8QAI9PMy4X9kjj
+      A+88l9efDn+O0sdRa+F65IEmnjkt/owI3jyjFlssz7h/4zqWZCWklxYOdB3CQfz/
+      Y9hn0yJEIQe6CRhUS6JTUJi6646e+opfop1wVh2pceUl77k54nHpjYn/oZgK/Pmn
+      Br/vxhJC5Xhp5ibQYczv3iM5ij9NG86bW6w0Eji4lZmWbasGB3zlLKLl+3z7mPB2
+      2bQmEH1pmMo9T5MgBB2dXTDDPzBwcTpyb/j2N/ls6CzHj853bDZJuKoJr1aJcKm8
+      z8wcWKi3c43s5S2BTf6QHyiog8DqpSnKO7UWDbZutaJtuxz7rwonSVfDoxfuoqqN
+      uGBkpm1R8XX+PLZQOZ6eVHarc8rTh3an/UApuZ2MgYh4VFUpf8zU7Q5ZUkvABw//
+      mmUbh0MogW+BeTBUYojNfuq1YcEeEMecoDuFTLwCJUHwLzRwnMGr5HUzZ22xCriP
+      6uS9yZVFRCG4VRfqYZi1bBRGc0rwbfKVJ1izJkfwH7MG+krqVYBYw45AU+FzXLkY
+      Nqlsf6810i3YAXlTpVdstlvclorQd0t5Nq37XPO4vHWCsZf2XALLzVoD+Q/CWNYr
+      +NJXiVfFBEGwtVLO719YgyT6orHsDZfzb3zwnDOcXjQIgMqi9cps0ofolvHs+9Dc
+      YW0bznCiyWfvLxmABU4UyOYJ+yOM8rtu
+      =dyWN
+      -----END PGP PUBLIC KEY BLOCK-----
+    state: present
+
+- name: Add Quamotion PPA repository
+  apt_repository: 
+    repo: 'deb http://ppa.launchpad.net/quamotion/ppa/ubuntu {{ ansible_distribution_release }} main' 
+    state: present 
+    filename: quamotion
+    update_cache: no
+  register: quamotion_repo
+
+# It appears we must do this in a separate step; https://github.com/ansible/ansible/pull/57266
+# adds a update_cache_retries option to the apt_repository task but this was not yet
+# implemented.
+- name: Update APT cache
+  apt:
+    update_cache: yes
+  retries: 3
+  when: quamotion_repo.changed
+
+- name: Install usbmuxd
+  apt: 
+    name: usbmuxd
+    state: present
+    # Cache was updated previously
+    update_cache: no
+  retries: 3
+
+- name: Set architecture [x64]
+  set_fact:
+    quamotion_architecture: "x64"
+  when: ansible_architecture == "x86_64"
+
+- name: Set architecture [arm64]
+  set_fact:
+    quamotion_architecture: "arm64"
+  when: ansible_architecture == "aarch64"
+
+- name: Error on unsupported architecture
+  fail:
+    msg: "The architecture {{ ansible_architecture }} is not supported"
+  when: (quamotion_architecture is undefined) or (quamotion_architecture | length == 0)
+
+- name: Install xcuitrunner
+  apt:
+    deb: "https://qmcdn.blob.core.windows.net/download/xcuitrunner.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
+
+- name: Install ios-deploy
+  apt:
+    deb: "https://qmcdn.blob.core.windows.net/download/ios-deploy.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
+
+- name: Install xcshim
+  apt:
+    deb: "https://qmcdn.blob.core.windows.net/download/xcshim-{{ xcshim_version }}.deb"

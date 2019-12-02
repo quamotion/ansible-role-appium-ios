@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    nodejs_install_npm_user: root
+  roles:
+    - role: appium-ios

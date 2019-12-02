@@ -19,7 +19,7 @@ Role Variables
 | Variable                 | Default   | Description
 |--------------------------|-----------|-------------------------------------------
 | `appium_version`         | `1.15.1`  | The version of Appium to install
-| `quamotion_version`      | `0.132.4` | The version of the Quamotion utilities (ios-deploy, xcuitrunner) to install
+| `quamotion_version`      | `0.132.8` | The version of the Quamotion utilities (ios-deploy, xcuitrunner) to install
 | `xcshim_version`         | `0.1.4`   | The version of [xcshim](https://github.com/quamotion/xcshim) to install
 | `license_file_path`      |           | If available, the path to your Quamotion license file
 | `developer_profile_path` |           | If available, the path to your iOS Developer Profile

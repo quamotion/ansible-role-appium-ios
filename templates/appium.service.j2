@@ -1,0 +1,13 @@
+[Unit]
+Description=Appium
+Documentation=https://appium.io
+After=network.target
+
+[Service]
+Type=simple
+User={{ appium_user }}
+Environment="DEVELOPER_DIR=/usr/local/opt/xcode"
+ExecStart=/usr/bin/appium
+
+[Install]
+WantedBy=multi-user.target

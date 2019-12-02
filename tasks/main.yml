@@ -8,6 +8,24 @@
   environment:
     APPIUM_SKIP_CHROMEDRIVER_INSTALL: true
 
+- name: Add the "appium" user
+  user:
+    name: "{{ appium_user }}"
+    comment: Appium Service Account
+
+- name: "Create Appium service"
+  template:
+    src: "appium.service.j2"
+    dest: "/etc/systemd/system/appium.service"
+    mode: 0664
+
+- name: Create the Carthage directory, grant Appium user permissions
+  file:
+    path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent/Carthage/
+    state: directory
+    mode: 0775
+    owner: "{{ appium_user }}"
+
 - name: Add Quamotion PPA apt-key
   apt_key: 
     data: |
@@ -89,6 +107,30 @@
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/ios-deploy.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
 
+- name: Link ios-deploy into /usr/bin
+  file:
+    path: /usr/bin/ios-deploy
+    state: link
+    src: /usr/share/ios-deploy/ios-deploy
+
 - name: Install xcshim
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcshim-{{ xcshim_version }}.deb"
+
+- name: Copy license file
+  copy:
+    src: "{{ license_file_path }}"
+    dest: /etc/quamotion/.license
+  when: (license_file_path is defined) and (license_file_path | length > 0)
+
+- name: Copy developer profile
+  copy:
+    src: "{{ developer_profile_path }}"
+    dest: /etc/quamotion/quamotion.developerprofile
+  when: (developer_profile_path is defined) and (developer_profile_path | length > 0)
+
+- name: Copy developer disks
+  copy:
+    src: "{{ devimg_dir }}"
+    dest: /etc/quamotion/devimg/
+  when: (devimg_dir is defined) and (devimg_dir | length > 0)

@@ -4,9 +4,8 @@ galaxy_info:
   description: Appium with iOS support
   company: Quamotion
   license: MIT
-
+  role_name: appium-ios
   min_ansible_version: 1.2
-
   galaxy_tags: []
 
 dependencies:

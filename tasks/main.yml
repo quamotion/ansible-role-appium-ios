@@ -18,13 +18,12 @@
     src: "run-appium.j2"
     dest: "/home/{{ appium_user }}/run-appium"
     owner: "{{ appium_user }}"
-    mode: 0755
+    mode: 0644
 
 - name: "Create Appium service"
   template:
     src: "appium.service.j2"
     dest: "/etc/systemd/system/appium.service"
-    owner: "{{ appium_user }}"
     mode: 0664
 
 - name: Create the Carthage directory, grant Appium user permissions
@@ -135,19 +134,16 @@
   copy:
     src: "{{ license_file_path }}"
     dest: /etc/quamotion/.license
-    owner: "{{ appium_user }}"
   when: (license_file_path is defined) and (license_file_path | length > 0)
 
 - name: Copy developer profile
   copy:
     src: "{{ developer_profile_path }}"
     dest: /etc/quamotion/quamotion.developerprofile
-    owner: "{{ appium_user }}"
   when: (developer_profile_path is defined) and (developer_profile_path | length > 0)
 
 - name: Copy developer disks
   copy:
     src: "{{ devimg_dir }}"
     dest: /etc/quamotion/devimg/
-    owner: "{{ appium_user }}"
   when: (devimg_dir is defined) and (devimg_dir | length > 0)

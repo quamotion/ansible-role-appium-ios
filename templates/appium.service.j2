@@ -6,7 +6,7 @@ After=network.target
 [Service]
 Type=simple
 User={{ appium_user }}
-ExecStart=/bin/bash /home/{{ appium_user }}/run-appium
+ExecStart=/home/{{ appium_user }}/run-appium
 
 [Install]
 WantedBy=multi-user.target

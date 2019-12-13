@@ -18,7 +18,7 @@
     src: "run-appium.j2"
     dest: "/home/{{ appium_user }}/run-appium"
     owner: "{{ appium_user }}"
-    mode: 0644
+    mode: 0744
 
 - name: "Create Appium service"
   template:

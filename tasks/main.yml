@@ -13,6 +13,13 @@
     name: "{{ appium_user }}"
     comment: Appium Service Account
 
+- name: "Create Appium run script"
+  template:
+    src: "run-appium.j2"
+    dest: "/home/{{ appium_user }}/run-appium"
+    owner: "{{ appium_user }}"
+    mode: 0744
+
 - name: "Create Appium service"
   template:
     src: "appium.service.j2"
@@ -112,6 +119,12 @@
     path: /usr/bin/ios-deploy
     state: link
     src: /usr/share/ios-deploy/ios-deploy
+
+- name: "Configure ios-deploy"
+  template:
+    src: "ios-deploy.appsettings"
+    dest: "/usr/share/ios-deploy/appsettings.json"
+    mode: 0664
 
 - name: Install xcshim
   apt:

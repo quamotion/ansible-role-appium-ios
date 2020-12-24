@@ -1,6 +1,0 @@
-{
-  "iosdeploy": {
-    "licensePath": "/etc/quamotion/.license",
-    "developerDiskDir": "/etc/quamotion/devimg/"
-  }
-}

@@ -111,11 +111,26 @@
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcuitrunner.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
 
+- name: Add /etc/quamotion directory.
+  file:
+    path: /etc/quamotion
+    state: directory
+    mode: 0775
+    owner: "{{ appium_user }}"
+
+- name: "Copy developerprofile passwordfile"
+  template:
+    src: "quamotion.developerprofile.password"
+    dest: "/etc/quamotion/quamotion.developerprofile.password"
+    mode: 0664
+    owner: "{{ appium_user }}"
+
 - name: Copy license file
   copy:
     src: "{{ license_file_path }}"
     dest: /etc/quamotion/.license
     mode: 0664
+    owner: "{{ appium_user }}"
   when: (license_file_path is defined) and (license_file_path | length > 0)
 
 - name: Copy developer profile
@@ -123,11 +138,19 @@
     src: "{{ developer_profile_path }}"
     dest: /etc/quamotion/quamotion.developerprofile
     mode: 0664
+    owner: "{{ appium_user }}"
   when: (developer_profile_path is defined) and (developer_profile_path | length > 0)
 
 - name: Copy developer disks
   copy:
     src: "{{ devimg_dir }}"
     dest: /etc/quamotion/devimg/
+    owner: "{{ appium_user }}"
     mode: 0664
   when: (devimg_dir is defined) and (devimg_dir | length > 0)
+
+- name: Start service appium
+  systemd:
+    name: appium
+    state: started
+    daemon_reload: yes

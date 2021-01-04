@@ -135,16 +135,19 @@
   copy:
     src: "{{ license_file_path }}"
     dest: /etc/quamotion/.license
+    mode: 0664
   when: (license_file_path is defined) and (license_file_path | length > 0)
 
 - name: Copy developer profile
   copy:
     src: "{{ developer_profile_path }}"
     dest: /etc/quamotion/quamotion.developerprofile
+    mode: 0664
   when: (developer_profile_path is defined) and (developer_profile_path | length > 0)
 
 - name: Copy developer disks
   copy:
     src: "{{ devimg_dir }}"
     dest: /etc/quamotion/devimg/
+    mode: 0664
   when: (devimg_dir is defined) and (devimg_dir | length > 0)

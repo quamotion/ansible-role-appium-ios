@@ -11,6 +11,6 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - bionic
-        - eoan
+        - focal
 dependencies:
 - role: geerlingguy.nodejs

@@ -20,7 +20,6 @@ Role Variables
 |--------------------------|------------|-------------------------------------------
 | `appium_version`         | `1.15.1`   | The version of Appium to install
 | `quamotion_version`      | `0.150.70` | The version of the Quamotion utility (xcuitrunner) to install
-| `xcshim_version`         | `0.1.4`    | The version of [xcshim](https://github.com/quamotion/xcshim) to install
 | `license_file_path`      |            | If available, the path to your Quamotion license file
 | `developer_profile_path` |            | If available, the path to your iOS Developer Profile
 | `devimg_dir`             |            | If available, the path to the directory which contains your Developer Disk images

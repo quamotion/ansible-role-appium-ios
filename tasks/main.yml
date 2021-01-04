@@ -111,10 +111,6 @@
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcuitrunner.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
 
-- name: Install xcshim
-  apt:
-    deb: "https://qmcdn.blob.core.windows.net/download/xcshim-{{ xcshim_version }}.deb"
-
 - name: Copy license file
   copy:
     src: "{{ license_file_path }}"

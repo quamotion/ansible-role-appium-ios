@@ -11,8 +11,6 @@ lint: |
 platforms:
   - name: ubuntu.18.04
     image: ubuntu:18.04
-  - name: ubuntu.20.04
-    image: ubuntu:20.04
 provisioner:
   name: ansible
 verifier:

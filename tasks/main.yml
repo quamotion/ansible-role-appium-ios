@@ -111,22 +111,6 @@
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcuitrunner.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
 
-- name: Install ios-deploy
-  apt:
-    deb: "https://qmcdn.blob.core.windows.net/download/ios-deploy.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
-
-- name: Link ios-deploy into /usr/bin
-  file:
-    path: /usr/bin/ios-deploy
-    state: link
-    src: /usr/share/ios-deploy/ios-deploy
-
-- name: "Configure ios-deploy"
-  template:
-    src: "ios-deploy.appsettings"
-    dest: "/usr/share/ios-deploy/appsettings.json"
-    mode: 0664
-
 - name: Install xcshim
   apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcshim-{{ xcshim_version }}.deb"

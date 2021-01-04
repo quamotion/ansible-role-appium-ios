@@ -16,20 +16,20 @@ xcuitrunner if you want to run tests on iOS devices.
 Role Variables
 --------------
 
-| Variable                 | Default   | Description
-|--------------------------|-----------|-------------------------------------------
-| `appium_version`         | `1.15.1`  | The version of Appium to install
-| `quamotion_version`      | `0.132.8` | The version of the Quamotion utilities (ios-deploy, xcuitrunner) to install
-| `xcshim_version`         | `0.1.4`   | The version of [xcshim](https://github.com/quamotion/xcshim) to install
-| `license_file_path`      |           | If available, the path to your Quamotion license file
-| `developer_profile_path` |           | If available, the path to your iOS Developer Profile
-| `devimg_dir`             |           | If available, the path to the directory which contains your Developer Disk images
-| `appium_user`            | `appium`  | The name of the service account for the Appium service
+| Variable                 | Default    | Description
+|--------------------------|------------|-------------------------------------------
+| `appium_version`         | `1.15.1`   | The version of Appium to install
+| `quamotion_version`      | `0.150.70` | The version of the Quamotion utility (xcuitrunner) to install
+| `xcshim_version`         | `0.1.4`    | The version of [xcshim](https://github.com/quamotion/xcshim) to install
+| `license_file_path`      |            | If available, the path to your Quamotion license file
+| `developer_profile_path` |            | If available, the path to your iOS Developer Profile
+| `devimg_dir`             |            | If available, the path to the directory which contains your Developer Disk images
+| `appium_user`            | `appium`   | The name of the service account for the Appium service
 
 Dependencies
 ------------
 
-- This role uses the [geerlingguy.nodejs] role to deploy node.js
+- This role uses the [geerlingguy.nodejs](https://github.com/geerlingguy/ansible-role-nodejs) role to deploy node.js
 
 Example Playbook
 ----------------

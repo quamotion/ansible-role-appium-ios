@@ -1,6 +1,6 @@
 ---
 appium_version: "1.15.1"
-quamotion_version: "0.133.2"
+quamotion_version: "0.150.70"
 xcshim_version: "0.1.4"
 
 license_file_path: ""

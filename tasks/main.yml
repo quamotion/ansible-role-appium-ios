@@ -34,7 +34,7 @@
     owner: "{{ appium_user }}"
 
 - name: Add Quamotion PPA apt-key
-  apt_key: 
+  apt_key:
     data: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -67,9 +67,9 @@
     state: present
 
 - name: Add Quamotion PPA repository
-  apt_repository: 
-    repo: 'deb http://ppa.launchpad.net/quamotion/ppa/ubuntu {{ ansible_distribution_release }} main' 
-    state: present 
+  apt_repository:
+    repo: 'deb http://ppa.launchpad.net/quamotion/ppa/ubuntu {{ ansible_distribution_release }} main'
+    state: present
     filename: quamotion
     update_cache: no
   register: quamotion_repo
@@ -82,9 +82,10 @@
     update_cache: yes
   retries: 3
   when: quamotion_repo.changed
+  tags: ['skip_ansible_lint']
 
 - name: Install usbmuxd
-  apt: 
+  apt:
     name: usbmuxd
     state: present
     # Cache was updated previously

@@ -1,0 +1,18 @@
+---
+language: python
+services: docker
+
+arch:
+  - amd64
+  - arm64
+
+install:
+  # Install test dependencies.
+  - pip install molecule docker
+
+script:
+  # Run tests.
+  - molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

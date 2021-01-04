@@ -8,7 +8,7 @@ arch:
 
 install:
   # Install test dependencies.
-  - pip install molecule docker molecule-docker
+  - pip install molecule docker molecule-docker ansible ansible-lint
 
 script:
   # Run tests.

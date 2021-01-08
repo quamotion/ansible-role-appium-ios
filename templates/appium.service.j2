@@ -6,8 +6,9 @@ After=network.target
 [Service]
 Type=simple
 User={{ appium_user }}
-ExecStart=/home/{{ appium_user }}/run-appium
-Environment="PATH=/usr/bin:/usr/share/xcuitrunner:$PATH"
+ExecStart=/usr/bin/appium
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/xcuitrunner:/usr/local/opt/xcode"
+Environment="DEVELOPER_DIR=/usr/local/opt/xcode"
 
 [Install]
 WantedBy=multi-user.target

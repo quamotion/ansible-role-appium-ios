@@ -19,12 +19,11 @@
     dest: "/etc/systemd/system/appium.service"
     mode: 0664
 
-- name: "Update permissions"
+- name: "Update appium-webdriveragent folder permissions"
   file:
     path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent
     state: directory
     mode: "a+rwx"
-    recurse: yes
 
 - name: Create the Carthage directory, grant Appium user permissions
   file:

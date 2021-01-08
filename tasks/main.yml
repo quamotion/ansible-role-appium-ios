@@ -121,7 +121,7 @@
   template:
     src: "quamotion.developerprofile.password"
     dest: "/etc/quamotion/quamotion.developerprofile.password"
-    mode: 0664
+    mode: 0600
     owner: "{{ appium_user }}"
 
 - name: Copy license file

@@ -16,14 +16,15 @@ xcuitrunner if you want to run tests on iOS devices.
 Role Variables
 --------------
 
-| Variable                 | Default    | Description
-|--------------------------|------------|-------------------------------------------
-| `appium_version`         | `1.15.1`   | The version of Appium to install
-| `quamotion_version`      | `0.150.70` | The version of the Quamotion utility (xcuitrunner) to install
-| `license_file_path`      |            | If available, the path to your Quamotion license file
-| `developer_profile_path` |            | If available, the path to your iOS Developer Profile
-| `devimg_dir`             |            | If available, the path to the directory which contains your Developer Disk images
-| `appium_user`            | `appium`   | The name of the service account for the Appium service
+| Variable                     | Default    | Description
+|------------------------------|------------|-------------------------------------------
+| `appium_version`             | `1.15.1`   | The version of Appium to install
+| `quamotion_version`          | `1.4.38` | The version of the Quamotion utility (xcuitrunner) to install
+| `license_file_path`          |            | If available, the path to your Quamotion license file
+| `developer_profile_path`     |            | If available, the path to your iOS Developer Profile
+| `developer_profile_password` |            | If available, the password for the developer profile (the password used to protect the private key to the certificates)
+| `devimg_dir`                 |            | If available, the path to the directory which contains your Developer Disk images
+| `appium_user`                | `appium`   | The name of the service account for the Appium service
 
 Dependencies
 ------------
@@ -41,7 +42,8 @@ The following playbook file will deploy the `appium-ios` role to a host named `r
   become: true
   vars:
     license_file_path: /etc/quamotion/.license
-    developer_profile_path: etc/quamotion/quamotion.developerprofile
+    developer_profile_path: /etc/quamotion/quamotion.developerprofile
+    developer_profile_password: quamotion
     devimg_dir: /etc/quamotion/devimg/
   roles:
   - appium-ios

@@ -1,10 +1,9 @@
 ---
 appium_version: "1.15.1"
-quamotion_version: "0.150.70"
-xcshim_version: "0.1.4"
-
+quamotion_version: "1.4.38"
 license_file_path: ""
 developer_profile_path: ""
 devimg_dir: ""
 
 appium_user: "appium"
+developer_profile_password: ""

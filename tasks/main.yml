@@ -1,4 +1,9 @@
 ---
+
+- name: Error on distribution
+  fail:
+    msg: "The distribution {{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
+  when: not (ansible_distribution == "Ubuntu" and ((ansible_distribution_version == "20.04") or (ansible_distribution_version == "19.04"))              
 - name: Install "appium" node.js package.
   npm:
     name: appium

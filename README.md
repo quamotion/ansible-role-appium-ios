@@ -18,8 +18,8 @@ Role Variables
 
 | Variable                     | Default    | Description
 |------------------------------|------------|-------------------------------------------
-| `appium_version`             | `1.15.1`   | The version of Appium to install
-| `quamotion_version`          | `1.4.38` | The version of the Quamotion utility (xcuitrunner) to install
+| `appium_version`             | `1.20.2`   | The version of Appium to install
+| `quamotion_version`          | `1.5.12`   | The version of the Quamotion utility (xcuitrunner) to install
 | `license_file_path`          |            | If available, the path to your Quamotion license file
 | `developer_profile_path`     |            | If available, the path to your iOS Developer Profile
 | `developer_profile_password` |            | If available, the password for the developer profile (the password used to protect the private key to the certificates)
@@ -59,5 +59,4 @@ Author Information
 
 This role is authored by [Quamotion](http://docs.quamotion.mobi).
 
-Quamotion provides commercial software which allows you to automate
-iOS devices using Linux or Windows.
+Quamotion provides commercial software which allows you to automate iOS devices using Linux or Windows.

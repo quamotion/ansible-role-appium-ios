@@ -25,11 +25,29 @@
     dest: "/etc/systemd/system/appium.service"
     mode: 0664
 
+- name: "Register appium-webdriveragent folder"
+  stat:
+    path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent
+  register: appiumwebdriveragent
+
 - name: "Update appium-webdriveragent folder permissions"
   file:
     path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent
     state: directory
     mode: "a+rwx"
+  when: appiumwebdriveragent.stat.exists
+
+- name: "Register appium-xcuitest-driver appium-webdriveragent folder"
+  stat:
+    path: /usr/lib/node_modules/appium/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+  register: appiumwebdriveragentxcuirunner
+
+- name: "Update appium-webdriveragent folder permissions"
+  file:
+    path: /usr/lib/node_modules/appium/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
+    state: directory
+    mode: "a+rwx"
+  when: appiumwebdriveragentxcuirunner.stat.exists
 
 - name: Create the Carthage directory, grant Appium user permissions
   file:

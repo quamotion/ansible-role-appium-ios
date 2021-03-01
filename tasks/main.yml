@@ -183,12 +183,6 @@
     mode: 0664
   when: (devimg_dir is defined) and (devimg_dir | length > 0)
 
-- name:  Check Quamotion XCUITRunner
-  shell: |
-    usbmuxd
-    xcuitrunner run --exit
-  tags: ['molecule-notest', 'skip_ansible_lint']
-
 - name: Start appium service
   systemd:
     name: appium
@@ -196,3 +190,9 @@
     enabled: yes
     daemon_reload: yes
   tags: ['molecule-notest']
+
+- name:  Check Quamotion XCUITRunner
+  shell: |
+    usbmuxd
+    xcuitrunner run --exit
+  tags: ['debug', 'molecule-notest', 'skip_ansible_lint']

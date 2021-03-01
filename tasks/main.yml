@@ -195,5 +195,4 @@
   shell: |
     usbmuxd
     xcuitrunner run --exit
-  tags: [ never, debug, molecule-notest, skip_ansible_lint]
-  
+  tags: [ never, debug, 'molecule-notest', 'skip_ansible_lint']

@@ -141,6 +141,17 @@
     mode: 0775
     owner: "{{ appium_user }}"
 
+- name: Register machine id
+  command: xcuitrunner --machineId
+  register: machine_id_output
+  tags: ['molecule-notest', 'skip_ansible_lint']
+
+- name: Request trial license
+  fail:
+    msg: "No license is provided. You can request a trial license at http://docs.quamotion.mobi/license?machineId={{ machine_id_output.stdout }}"
+  when: (license_file_path is not defined) or (license_file_path | length <= 0)
+  tags: ['molecule-notest', 'skip_ansible_lint']
+
 - name: "Copy developerprofile passwordfile"
   template:
     src: "quamotion.developerprofile.password"
@@ -179,3 +190,9 @@
     enabled: yes
     daemon_reload: yes
   tags: ['molecule-notest']
+
+- name:  Check Quamotion XCUITRunner
+  shell: |
+    usbmuxd
+    xcuitrunner run --exit
+  tags: [ never, debug, 'molecule-notest', 'skip_ansible_lint']

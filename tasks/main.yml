@@ -1,12 +1,12 @@
 ---
 
 - name: Error on distribution
-  fail:
+  ansible.builtin.fail:
     msg: "The distribution {{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
   when: not (ansible_distribution == "Ubuntu" and ((ansible_distribution_version == "20.04") or (ansible_distribution_version == "18.04")))
 
 - name: Install "appium" node.js package.
-  npm:
+  ansible.builtin.npm:
     name: appium
     version: "{{ appium_version }}"
     global: true
@@ -15,49 +15,49 @@
     APPIUM_SKIP_CHROMEDRIVER_INSTALL: true
 
 - name: Add the "appium" user
-  user:
+  ansible.builtin.user:
     name: "{{ appium_user }}"
     comment: Appium Service Account
 
 - name: "Create Appium service"
-  template:
+  ansible.builtin.template:
     src: "appium.service.j2"
     dest: "/etc/systemd/system/appium.service"
     mode: 0664
 
 - name: "Register appium-webdriveragent folder"
-  stat:
+  ansible.builtin.stat:
     path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent
   register: appiumwebdriveragent
 
 - name: "Update appium-webdriveragent folder permissions"
-  file:
+  ansible.builtin.file:
     path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent
     state: directory
     mode: "a+rwx"
   when: appiumwebdriveragent.stat.exists
 
 - name: "Register appium-xcuitest-driver appium-webdriveragent folder"
-  stat:
+  ansible.builtin.stat:
     path: /usr/lib/node_modules/appium/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
   register: appiumwebdriveragentxcuirunner
 
 - name: "Update appium-webdriveragent folder permissions"
-  file:
+  ansible.builtin.file:
     path: /usr/lib/node_modules/appium/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent
     state: directory
     mode: "a+rwx"
   when: appiumwebdriveragentxcuirunner.stat.exists
 
 - name: Create the Carthage directory, grant Appium user permissions
-  file:
+  ansible.builtin.file:
     path: /usr/lib/node_modules/appium/node_modules/appium-webdriveragent/Carthage/
     state: directory
     mode: 0775
     owner: "{{ appium_user }}"
 
 - name: Add Quamotion PPA apt-key
-  apt_key:
+  ansible.builtin.apt_key:
     data: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -90,7 +90,7 @@
     state: present
 
 - name: Add Quamotion PPA repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: 'deb http://ppa.launchpad.net/quamotion/ppa/ubuntu {{ ansible_distribution_release }} main'
     state: present
     filename: quamotion
@@ -101,14 +101,14 @@
 # adds a update_cache_retries option to the apt_repository task but this was not yet
 # implemented.
 - name: Update APT cache
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
   retries: 3
   when: quamotion_repo.changed
   tags: ['skip_ansible_lint']
 
 - name: Install usbmuxd
-  apt:
+  ansible.builtin.apt:
     name: usbmuxd
     state: present
     # Cache was updated previously
@@ -116,51 +116,51 @@
   retries: 3
 
 - name: Set architecture [x64]
-  set_fact:
+  ansible.builtin.set_fact:
     quamotion_architecture: "x64"
   when: ansible_architecture == "x86_64"
 
 - name: Set architecture [arm64]
-  set_fact:
+  ansible.builtin.set_fact:
     quamotion_architecture: "arm64"
   when: ansible_architecture == "aarch64"
 
 - name: Error on unsupported architecture
-  fail:
+  ansible.builtin.fail:
     msg: "The architecture {{ ansible_architecture }} is not supported"
   when: (quamotion_architecture is undefined) or (quamotion_architecture | length == 0)
 
 - name: Install xcuitrunner
-  apt:
+  ansible.builtin.apt:
     deb: "https://qmcdn.blob.core.windows.net/download/xcuitrunner.{{ quamotion_version }}.linux-{{ quamotion_architecture }}.deb"
 
 - name: Add /etc/quamotion directory.
-  file:
+  ansible.builtin.file:
     path: /etc/quamotion
     state: directory
     mode: 0775
     owner: "{{ appium_user }}"
 
 - name: Register machine id
-  command: xcuitrunner --machineId
+  ansible.builtin.command: xcuitrunner --machineId
   register: machine_id_output
   tags: ['molecule-notest', 'skip_ansible_lint']
 
 - name: Request trial license
-  fail:
+  ansible.builtin.fail:
     msg: "No license is provided. You can request a trial license at http://docs.quamotion.mobi/license?machineId={{ machine_id_output.stdout }}"
   when: (license_file_path is not defined) or (license_file_path | length <= 0)
   tags: ['molecule-notest', 'skip_ansible_lint']
 
 - name: "Copy developerprofile passwordfile"
-  template:
+  ansible.builtin.template:
     src: "quamotion.developerprofile.password"
     dest: "/etc/quamotion/quamotion.developerprofile.password"
     mode: 0600
     owner: "{{ appium_user }}"
 
 - name: Copy license file
-  copy:
+  ansible.builtin.copy:
     src: "{{ license_file_path }}"
     dest: /etc/quamotion/.license
     mode: 0664
@@ -168,7 +168,7 @@
   when: (license_file_path is defined) and (license_file_path | length > 0)
 
 - name: Copy developer profile
-  copy:
+  ansible.builtin.copy:
     src: "{{ developer_profile_path }}"
     dest: /etc/quamotion/quamotion.developerprofile
     mode: 0664
@@ -176,7 +176,7 @@
   when: (developer_profile_path is defined) and (developer_profile_path | length > 0)
 
 - name: Copy developer disks
-  copy:
+  ansible.builtin.copy:
     src: "{{ devimg_dir }}"
     dest: /etc/quamotion/devimg/
     owner: "{{ appium_user }}"
@@ -184,7 +184,7 @@
   when: (devimg_dir is defined) and (devimg_dir | length > 0)
 
 - name: Start appium service
-  systemd:
+  ansible.builtin.systemd:
     name: appium
     state: started
     enabled: yes
@@ -192,7 +192,7 @@
   tags: ['molecule-notest']
 
 - name:  Check Quamotion XCUITRunner
-  shell: |
+  ansible.builtin.shell: |
     usbmuxd
     xcuitrunner run --exit
   tags: [ never, debug, 'molecule-notest', 'skip_ansible_lint']

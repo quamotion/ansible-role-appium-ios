@@ -6,6 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - run: ansible-galaxy install geerlingguy.nodejs
+      name: Install Ansible dependencies
+
     - run: pip install molecule docker molecule-docker ansible flake8 ansible-lint
       name: Install molecule
 
